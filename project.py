@@ -97,3 +97,31 @@ question_embedding = dictionary.doc2bow(question.split())
 
 
 print("\n\n",question,"\n",question_embedding)
+
+
+"""Now that we have the the vector representation of each question word using BOW, we will compute the dictance between to the vectors
+   using cosine similarity. The closest matching answer can be retrieved by finding the cosine similarity of the query vector with each
+   of the FAQ question vectors"""
+
+#888888888888888888********************************************************************************************************************************
+
+import sklearn
+from sklearn.metrics.pairwise import cosine_similarity;
+def retrieveAndPrintFAQAnswer(question_embedding,sentence_embeddings,FAQdf,sentences):
+    max_sim=-1;
+    index_sim=-1;
+    for index,faq_embedding in enumerate(sentence_embeddings):
+        #sim=cosine_similarity(embedding.reshape(1, -1),question_embedding.reshape(1, -1))[0][0];
+        sim=cosine_similarity(faq_embedding,question_embedding)[0][0];
+        print(index, sim, sentences[index])
+        if sim>max_sim:
+            max_sim=sim;
+            index_sim=index;
+       
+    print("\n")
+    print("Question: ",question)
+    print("\n");
+    print("Our output: ",FAQdf.iloc[index_sim,0]) 
+    print(FAQdf.iloc[index_sim,1])        
+    
+retrieveAndPrintFAQAnswer(question_embedding,bow_corpus,df,sentences);
