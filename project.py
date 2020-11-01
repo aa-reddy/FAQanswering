@@ -1,6 +1,7 @@
 import pandas as pd
 
-df = pd.read_csv("mydata - mydata.csv")
+# df = pd.read_csv("mydata - mydata.csv")
+df = pd.read_csv("BigData - WikiQA-train.csv")
 df.columns=["questions","answers"]
 
 print(df)
@@ -92,7 +93,9 @@ dictionary = corpora.Dictionary(sentence_words)
 #question_orig="How does COVID-19 testing work"
 #question_orig="How much does testing cost"
 # question_orig="what is the dubois library schedule"
-question_orig = "How old was William Shakespeare?"
+question_orig = "Who is the prime minister of Greece ? "
+# question_orig = "How is Alicia?"
+
 # question_orig = "How much is the cost of living ?"
 # question_orig = "How much is the cost of living on campus?"
 question=clean_sentence(question_orig,stopwords=False)
@@ -137,6 +140,10 @@ for index, row in df.iterrows():
 vectorizer = CountVectorizer(stop_words = 'english')
 sentence_vectors = vectorizer.fit_transform(questionList)
 questionVectors = sentence_vectors.toarray()
+
+for index in range(1,len(questionList)):
+    print(str(questionList[index]) + "\n"+ str(questionVectors[index]) + "\n")
+
 print(sentence_vectors.shape)
 
 max_sim = 0
@@ -150,5 +157,9 @@ for index in range(1,len(questionList)):
 
 print("\n")
 print("Question: ",question_orig)
-print("\n");
-print("Most relevant Question - \n" + questionList[index_sim] + "\n" + df.iloc[index_sim,1])
+print("\n")
+
+if index_sim == 0 :
+    print("No relevant question/answer pair found.")
+else:
+    print("Most relevant Question - \n" + questionList[index_sim] + "\n" + df.iloc[index_sim-1,1])
